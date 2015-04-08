@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 template<typename T, typename U>
 class Menu {
@@ -15,7 +16,7 @@ public:
   Menu(U *context, const std::string &title)
     : _title(title) {
     _context = context;
-    _listChoices.push_back("Quit");
+    _listChoices.push_back("Retour");
     _listFunctions.push_back(NULL);
   }
   ~Menu() {}
@@ -34,12 +35,12 @@ public:
         std::cout << "|" << std::setw(4) << i++ << "] " << choice << std::setw(50 - choice.length()) << "|" << std::endl;
       }
       std::cout << "|" << std::setfill('-') << std::setw(56) << "|" << std::setfill(' ') << std::endl;
-      std::cout << "Enter your choice : ";
+      std::cout << "Entrez votre choix : ";
       std::string entryStr;
       std::getline(std::cin, entryStr);
       try {
         entry = std::stoi(entryStr);
-        if (entry >= _listChoices.size()) {
+        if (entry >= (int)_listChoices.size()) {
           throw -1;
         }
         else if (entry) {
@@ -47,7 +48,7 @@ public:
         }
       }
       catch (...) {
-        std::cout << "Invalid Choice" << std::endl;
+        std::cout << "Choix invalide" << std::endl;
         entry = -1;
       }
     }
