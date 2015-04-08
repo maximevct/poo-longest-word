@@ -1,8 +1,8 @@
 NAME        = longest_word
 SRC_DIR     = src
 SRC         = $(SRC_DIR)/main.cpp         \
-							$(SRC_DIR)/dictionnary.cpp  \
-							$(SRC_DIR)/longest_word.cpp
+							$(SRC_DIR)/Dictionnary.cpp  \
+							$(SRC_DIR)/Longest_word.cpp
 INCLUDE_DIR = include
 OBJ         = $(SRC:.cpp=.o)
 CXX         = g++
