@@ -1,22 +1,22 @@
-#ifndef __DICTIONNARY_HH__
-#define __DICTIONNARY_HH__
+#ifndef __Dictionnary_HH__
+#define __Dictionnary_HH__
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 
-class dictionnary {
+class Dictionnary {
 private:
   std::string               _filename;
   std::vector<std::string>  _wordlist;
 public:
-  dictionnary(const std::string &);
-  ~dictionnary();
+  Dictionnary(const std::string &);
+  ~Dictionnary();
 
   void load();
   const std::vector<std::string> getWordList() const;
 
-  friend std::ostream &operator<<(std::ostream &, const dictionnary);
+  friend std::ostream &operator<<(std::ostream &, const Dictionnary);
 
 };
 

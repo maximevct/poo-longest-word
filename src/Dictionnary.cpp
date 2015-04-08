@@ -1,12 +1,12 @@
-#include "dictionnary.hh"
+#include "Dictionnary.hh"
 
-dictionnary::dictionnary(const std::string &filename) : _filename(filename) {
+Dictionnary::Dictionnary(const std::string &filename) : _filename(filename) {
 
 }
 
-dictionnary::~dictionnary() {}
+Dictionnary::~Dictionnary() {}
 
-void dictionnary::load() {
+void Dictionnary::load() {
   std::ifstream file(_filename);
   if (!file)
     throw "Unable to open file";
@@ -17,11 +17,11 @@ void dictionnary::load() {
   }
 }
 
-const std::vector<std::string> dictionnary::getWordList() const {
+const std::vector<std::string> Dictionnary::getWordList() const {
   return _wordlist;
 }
 
-std::ostream &operator<<(std::ostream &os, const dictionnary dict) {
+std::ostream &operator<<(std::ostream &os, const Dictionnary dict) {
   size_t i = 0;
   for (const auto &word : dict.getWordList()) {
     os << word << "\n";

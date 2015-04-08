@@ -1,10 +1,10 @@
 #ifndef __LOGEST_WORD_HH
 #define __LOGEST_WORD_HH
 
-class longest_word {
+class Longest_word {
 public:
-  longest_word();
-  ~longest_word();
+  Longest_word();
+  ~Longest_word();
 
 };
 
