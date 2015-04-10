@@ -10,6 +10,7 @@ class Game {
 private:
   Menu<void, Game> *_menu;
   Dictionnary      *_dict;
+  std::string       _letters;
 public:
   Game(const std::string &);
   ~Game();

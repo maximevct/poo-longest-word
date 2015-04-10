@@ -26,11 +26,26 @@ public:
     _listFunctions.push_back(func);
   }
 
+  void setTitle(const std::string &title) {
+    _title = title;
+  }
+
+  std::string getString(const std::string &txt) {
+    std::cout << txt << " (0 pour quitter): ";
+    std::string in;
+    std::getline(std::cin, in);
+    if (in.length() == 0) {
+      std::cout << "Erreur : Ne peut etre vide, réessayez" << std::endl;
+      return getString(txt);
+    }
+    return in;
+  }
+
   void show() {
     int entry = -1;
     while (entry != 0) {
       int i = 0;
-      std::cout << "|------" << _title << std::setfill('-') << std::setw(50 - _title.length()) << "|" << std::setfill(' ') << std::endl;
+      std::cout << "\n|------" << _title << std::setfill('-') << std::setw(50 - _title.length()) << "|" << std::setfill(' ') << std::endl;
       for (auto choice : _listChoices) {
         std::cout << "|" << std::setw(4) << i++ << "] " << choice << std::setw(50 - choice.length()) << "|" << std::endl;
       }
@@ -44,6 +59,7 @@ public:
           throw -1;
         }
         else if (entry) {
+          std::cout << std::endl;
           (_context->*_listFunctions[entry])();
         }
       }

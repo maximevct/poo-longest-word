@@ -17,7 +17,24 @@ void Game::launch() {
 }
 
 void Game::enterLetters() {
-  std::cout << "Non implémenté" << std::endl;
+  std::string letters = _menu->getString("Entrez entre 1 et 10 lettres");
+  if (letters == "0")
+    return ;
+  if (letters.size() > 10) {
+    std::cout << "Erreur : Le nombre de lettres doit etre inférieur à 10" << std::endl;
+    return enterLetters();
+  }
+  for (char &c : letters) {
+    if (c >= 'A' && c <= 'Z')
+      c += 32;
+    if (c < 'a' || c > 'z') {
+      std::cout << "Erreur : Utilisez uniquement des caractères alphabétiques" << std::endl;
+      return enterLetters();
+    }
+  }
+  _letters = letters;
+  _menu->setTitle("Menu principal (Lettres : " + _letters + ")");
+  std::cout << "Vous avez choisi les lettres : " << letters << std::endl;
 }
 
 void Game::getLongestWord() {
