@@ -10,7 +10,7 @@ int error_usage(const char *binary) {
 int main(int ac, char **av) {
   if (ac != 2)
     return error_usage(av[0]);
-  Game g;
+  Game g(av[1]);
   g.launch();
   return 0;
 }
