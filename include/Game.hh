@@ -20,7 +20,7 @@ public:
   void enterLetters();
   void getLongestWord();
   void getScrabbleWord();
-  void dispStats();
+  void dispDictionnary();
 };
 
 #endif

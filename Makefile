@@ -3,6 +3,7 @@ SRC_DIR     = src
 SRC         = $(SRC_DIR)/main.cpp         \
 							$(SRC_DIR)/Dictionnary.cpp  \
 							$(SRC_DIR)/Game.cpp  				\
+							$(SRC_DIR)/Word.cpp  				\
 							$(SRC_DIR)/Longest_word.cpp
 INCLUDE_DIR = include
 OBJ         = $(SRC:.cpp=.o)

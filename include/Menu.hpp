@@ -30,15 +30,33 @@ public:
     _title = title;
   }
 
-  std::string getString(const std::string &txt) {
+  std::string getString(const std::string &txt, bool verif = true) {
+    std::cout << txt << " (0 pour quitter): ";
+    std::string in;
+    std::getline(std::cin, in);
+    if (verif && in.length() == 0) {
+      std::cout << "Erreur : Ne peut etre vide, reessayez" << std::endl;
+      return getString(txt);
+    }
+    return in;
+  }
+
+  int getInt(const std::string &txt) {
     std::cout << txt << " (0 pour quitter): ";
     std::string in;
     std::getline(std::cin, in);
     if (in.length() == 0) {
-      std::cout << "Erreur : Ne peut etre vide, réessayez" << std::endl;
-      return getString(txt);
+      std::cout << "Erreur : Ne peut etre vide, reessayez" << std::endl;
+      return getInt(txt);
     }
-    return in;
+    try {
+      int value = std::stoi(in);
+      return value;
+    }
+    catch (...) {
+      std::cout << "Erreur : Entree invalide, reessayez" << std::endl;
+      return getInt(txt);
+    }
   }
 
   void show() {
