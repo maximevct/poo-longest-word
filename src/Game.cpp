@@ -1,7 +1,9 @@
 #include "Game.hh"
 
 Game::Game(const std::string &filename) {
+  std::cout << "Veuillez patientez, creation du dictionnaire en cours ... " << std::flush;
   _dict = new Dictionnary(filename);
+  std::cout << "\r               ";
   _menu = new Menu<void, Game>(this, "Menu principal");
   _menu->push_back("Entrer les lettres"                       , &Game::enterLetters);
   _menu->push_back("Obtenir le mot le plus long"              , &Game::getLongestWord);

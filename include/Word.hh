@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
+#include <map>
 
 class Word {
 private:
@@ -13,9 +14,12 @@ private:
   std::string _uniqueLettersOrdered;
   std::string _wordOrdered;
 
+  std::map<char, int> _letterWeight;
+
   void transformToUniqueLetters();
   void transformToUniqueLettersOrdered();
   void transformToOrdered();
+
 public:
   Word(const std::string &);
   ~Word();
