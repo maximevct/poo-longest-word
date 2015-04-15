@@ -1,30 +1,22 @@
 #include "Word.hh"
 
-Word::Word(const std::string &word, std::map<char, int> &letterWeight,
-  std::map<char, int> &scrabbleWeigth) : _word(word) {
+std::map<char, int> Word::_scrabbleWeigth = {
+  {'a', 1 }, {'e', 1 }, {'i', 1 }, {'l', 1 }, {'n', 1 }, {'o', 1 }, {'r', 1 }, {'s', 1 }, {'t', 1 }, {'u', 1 },
+  {'d', 2 }, {'g', 2 }, {'m', 2 },
+  {'b', 3 }, {'c', 3 }, {'p', 3 },
+  {'f', 4 }, {'h', 4 }, {'v', 4 },
+  {'j', 8 }, {'q', 8 },
+  {'k', 10}, {'w', 10}, {'x', 10}, {'y', 10}, {'z', 10}
+};
 
-  transformToOrdered(letterWeight);
-  transformToUniqueLetters();
-  transformToUniqueLettersOrdered(letterWeight);
+Word::Word(const std::string &word) : _word(word) {
+  transformToOrdered();
 }
 
 Word::~Word() {}
 
-void Word::transformToUniqueLetters() {
-  for (size_t i = 0; i < _word.size(); ++i)
-    if (_uniqueLetters.find(_word[i]) == std::string::npos)
-      _uniqueLetters.push_back(_word[i]);
-}
-
-void Word::transformToUniqueLettersOrdered(std::map<char, int> &letterWeight) {
-  _uniqueLettersOrdered = sortByWeight(_uniqueLetters, letterWeight);
-  _firstLetters.push_back(_uniqueLettersOrdered[0]);
-  if (_uniqueLettersOrdered.size() > 1)
-    _firstLetters.push_back(_uniqueLettersOrdered[1]);
-}
-
-void Word::transformToOrdered(std::map<char, int> &letterWeight) {
-  _wordOrdered = sortByWeight(_word, letterWeight);
+void Word::transformToOrdered() {
+  _wordOrdered = sortByWeight(_word);
 }
 
 bool Word::isComposedOf(const std::string &letters) const {
@@ -35,38 +27,23 @@ bool Word::isComposedOf(const std::string &letters) const {
   return j == letters.size();
 }
 
-std::string Word::sortByWeight(const std::string &src, std::map<char, int> &letterWeight) {
+std::string Word::sortByWeight(const std::string &src) {
   std::string dest(src);
-
-  size_t i = 0;
-  while (i + 1 < dest.size()) {
-    if (letterWeight[dest[i]] < letterWeight[dest[i + 1]]) {
-      char tmp = dest[i];
-      dest[i] = dest[i + 1];
-      dest[i + 1] = tmp;
-      i = 0;
-    }
-    else
-      i++;
-  }
+  std::sort(dest.begin(), dest.end(), Sort());
+  _firstLetters = dest.substr(0, 2);
   return dest;
 }
 
 void Word::displayFull() const {
-  std::cout << std::setw(25) << "Mot"                    << " : " << _word << "\n"
-            << std::setw(25) << "Lettres triees"         << " : " << _wordOrdered << "\n"
-            << std::setw(25) << "Lettres uniques"        << " : " << _uniqueLetters << "\n"
-            << std::setw(25) << "Lettres uniques triees" << " : " << _uniqueLettersOrdered
+  std::cout << std::setw(25) << "Mot"                    << " : " << _word          << "\n"
+            << std::setw(25) << "Lettres triees"         << " : " << _wordOrdered   << "\n"
+            << std::setw(25) << "Premieres lettres"      << " : " << _firstLetters  << "\n"
             << std::endl;
 }
 
 const std::string &Word::getWord() const { return _word; }
 
 const std::string &Word::getWordOrdered() const { return _wordOrdered; }
-
-const std::string &Word::getWordUniqueLetters() const { return _uniqueLetters; }
-
-const std::string &Word::getWordUniqueLettersOrdered() const { return _uniqueLettersOrdered; }
 
 const std::string &Word::getFirstLetters() const { return _firstLetters; }
 

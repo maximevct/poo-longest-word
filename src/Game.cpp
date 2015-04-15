@@ -7,7 +7,7 @@ Game::Game(const std::string &filename) {
   _menu->push_back("Entrer les lettres"                       , &Game::enterLetters);
   _menu->push_back("Obtenir le mot le plus long"              , &Game::getLongestWord);
   _menu->push_back("Obtenir le meilleur mot pour le scrabble" , &Game::getScrabbleWord);
-  _menu->push_back("Entrer dans le dictionnaire"              , &Game::dispDictionnary);
+  _menu->push_back("Chercher un mot"                          , &Game::findWord);
 }
 
 Game::~Game() {
@@ -17,7 +17,6 @@ Game::~Game() {
 
 void Game::launch() {
   _dict->load();
-  std::cout << "\r";
   _menu->show();
 }
 
@@ -38,18 +37,42 @@ void Game::enterLetters() {
     }
   }
   _letters = letters;
+  _possibilities.clear();
   _menu->setTitle("Menu principal (Lettres : " + letters + ")");
   std::cout << "Vous avez choisi les lettres : " << letters << std::endl;
 }
 
 void Game::getLongestWord() {
-  _dict->findLongestWord(_letters);
+  if (!_letters.size()) {
+    std::cout << "Vous devez d'abord entrer des lettres" << std::endl;
+    return enterLetters();
+  }
+  if (_possibilities.size() == 0)
+    _possibilities = _dict->findPossibleWords(new Word(_letters));
+  _dict->orderByLength(_possibilities);
+  displayList();
 }
 
 void Game::getScrabbleWord() {
   std::cout << "Non implémenté" << std::endl;
 }
 
-void Game::dispDictionnary() {
-  _dict->menu();
+void Game::findWord() {
+  std::string toFind = _menu->getString("Entrez le mot a chercher");
+  size_t size = toFind.size() - 1;
+  if (size > 10 || size < 2) {
+    std::cout << "Le nombre de lettres doit etre de 2 a 10, reessayez" << std::endl;
+    return findWord();
+  }
+  Word *w = _dict->findWord(new Word(toFind));
+  if (w)
+    w->displayFull();
+  else
+    std::cout << "Aucun mot n'a ete trouve" << std::endl;
+}
+
+void Game::displayList() {
+  for (Word *w : _possibilities) {
+    std::cout << w->getWord() << std::endl;
+  }
 }

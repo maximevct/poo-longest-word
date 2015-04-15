@@ -4,11 +4,12 @@ SRC         = $(SRC_DIR)/main.cpp         \
 							$(SRC_DIR)/Dictionnary.cpp  \
 							$(SRC_DIR)/Game.cpp  				\
 							$(SRC_DIR)/Word.cpp  				\
+							$(SRC_DIR)/Sort.cpp  				\
 							$(SRC_DIR)/Longest_word.cpp
 INCLUDE_DIR = include
 OBJ         = $(SRC:.cpp=.o)
 CXX         = g++
-CXXFLAGS    = -W -Wall -Wextra -std=c++11 -I $(INCLUDE_DIR)
+CXXFLAGS    = -W -Wall -Wextra -std=c++11 -I $(INCLUDE_DIR) -g2 -ggdb3
 RM          = rm -vf
 
 all:      $(NAME)
