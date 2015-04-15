@@ -7,8 +7,6 @@
 #include <iostream>
 #include <map>
 
-#include "Sort.hh"
-
 class Word {
   private:
   std::string  _word;
@@ -16,6 +14,7 @@ class Word {
   std::string  _wordOrdered;
   std::string  _firstLetters;
   static std::map<char, int> _scrabbleWeigth;
+  static std::map<char, int> _letterWeigth;
 
   void transformToOrdered();
 

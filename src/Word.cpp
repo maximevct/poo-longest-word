@@ -9,6 +9,14 @@ std::map<char, int> Word::_scrabbleWeigth = {
   {'k', 10}, {'w', 10}, {'x', 10}, {'y', 10}, {'z', 10}
 };
 
+std::map<char, int> Word::_letterWeigth = {
+  {'e', 1  },  {'a', 2  },  {'s', 3  },  {'i', 4  },  {'r', 5  },  {'t', 6  },
+  {'n', 7  },  {'o', 8  },  {'u', 9  },  {'l', 10 },  {'c', 11 },  {'m', 12 },
+  {'p', 13 },  {'d', 14 },  {'g', 15 },  {'b', 16 },  {'f', 17 },  {'h', 18 },
+  {'z', 19 },  {'v', 20 },  {'q', 21 },  {'y', 22 },  {'x', 23 },  {'j', 24 },
+  {'k', 25 },  {'w', 26 }
+};
+
 Word::Word(const std::string &word) : _word(word) {
   transformToOrdered();
 }
@@ -29,7 +37,9 @@ bool Word::isComposedOf(const std::string &letters) const {
 
 std::string Word::sortByWeight(const std::string &src) {
   std::string dest(src);
-  std::sort(dest.begin(), dest.end(), Sort());
+  std::sort(dest.begin(), dest.end(), [&](char a, char b) -> bool {
+    return Word::_letterWeigth[a] > Word::_letterWeigth[b];
+  });
   _firstLetters = dest.substr(0, 2);
   return dest;
 }
