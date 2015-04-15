@@ -5,6 +5,7 @@
 
 #include "Menu.hpp"
 #include "Dictionnary.hh"
+#include "Word.hh"
 
 class Game {
 private:

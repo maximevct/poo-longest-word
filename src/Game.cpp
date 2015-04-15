@@ -1,9 +1,8 @@
 #include "Game.hh"
 
 Game::Game(const std::string &filename) {
-  std::cout << "Veuillez patientez, creation du dictionnaire en cours ... " << std::flush;
+  std::cout << "Veuillez patientez, creation du dictionnaire en cours ... ";
   _dict = new Dictionnary(filename);
-  std::cout << "\r               ";
   _menu = new Menu<void, Game>(this, "Menu principal");
   _menu->push_back("Entrer les lettres"                       , &Game::enterLetters);
   _menu->push_back("Obtenir le mot le plus long"              , &Game::getLongestWord);
@@ -11,10 +10,14 @@ Game::Game(const std::string &filename) {
   _menu->push_back("Entrer dans le dictionnaire"              , &Game::dispDictionnary);
 }
 
-Game::~Game() {}
+Game::~Game() {
+  delete _menu;
+  delete _dict;
+}
 
 void Game::launch() {
   _dict->load();
+  std::cout << "\r";
   _menu->show();
 }
 
@@ -35,12 +38,12 @@ void Game::enterLetters() {
     }
   }
   _letters = letters;
-  _menu->setTitle("Menu principal (Lettres : " + _letters + ")");
+  _menu->setTitle("Menu principal (Lettres : " + letters + ")");
   std::cout << "Vous avez choisi les lettres : " << letters << std::endl;
 }
 
 void Game::getLongestWord() {
-  std::cout << "Non implémenté" << std::endl;
+  _dict->findLongestWord(_letters);
 }
 
 void Game::getScrabbleWord() {

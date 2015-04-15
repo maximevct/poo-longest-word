@@ -1,17 +1,11 @@
 #include "Word.hh"
 
-Word::Word(const std::string &word) : _word(word) {
-  _letterWeight = {
-    {'a', 1 }, {'e', 1 }, {'i', 1 }, {'l', 1 }, {'n', 1 }, {'o', 1 }, {'r', 1 }, {'s', 1 }, {'t', 1 }, {'u', 1 },
-    {'d', 2 }, {'g', 2 }, {'m', 2 },
-    {'b', 3 }, {'c', 3 }, {'p', 3 },
-    {'f', 4 }, {'h', 4 }, {'v', 4 },
-    {'j', 8 }, {'q', 8 },
-    {'k', 10}, {'w', 10}, {'x', 10}, {'y', 10}, {'z', 10}
-  };
-  transformToOrdered();
+Word::Word(const std::string &word, std::map<char, int> &letterWeight,
+  std::map<char, int> &scrabbleWeigth) : _word(word) {
+
+  transformToOrdered(letterWeight);
   transformToUniqueLetters();
-  transformToUniqueLettersOrdered();
+  transformToUniqueLettersOrdered(letterWeight);
 }
 
 Word::~Word() {}
@@ -22,26 +16,41 @@ void Word::transformToUniqueLetters() {
       _uniqueLetters.push_back(_word[i]);
 }
 
-void Word::transformToUniqueLettersOrdered() {
-  _uniqueLettersOrdered = _uniqueLetters;
-  std::sort(_uniqueLettersOrdered.begin(), _uniqueLettersOrdered.end());
+void Word::transformToUniqueLettersOrdered(std::map<char, int> &letterWeight) {
+  _uniqueLettersOrdered = sortByWeight(_uniqueLetters, letterWeight);
+  _firstLetters.push_back(_uniqueLettersOrdered[0]);
+  if (_uniqueLettersOrdered.size() > 1)
+    _firstLetters.push_back(_uniqueLettersOrdered[1]);
 }
 
-void Word::transformToOrdered() {
-  _wordOrdered = _word;
-  // std::sort(_wordOrdered.begin(), _wordOrdered.end());
+void Word::transformToOrdered(std::map<char, int> &letterWeight) {
+  _wordOrdered = sortByWeight(_word, letterWeight);
+}
+
+bool Word::isComposedOf(const std::string &letters) const {
+  size_t j = 0;
+  for (size_t i = 0; i < _wordOrdered.size() && j < letters.size(); i++)
+    if (letters[j] == _wordOrdered[i])
+      j++;
+  return j == letters.size();
+}
+
+std::string Word::sortByWeight(const std::string &src, std::map<char, int> &letterWeight) {
+  std::string dest(src);
+
   size_t i = 0;
-  while (i + 1 < _wordOrdered.size()) {
-    if (_letterWeight[_wordOrdered[i]] < _letterWeight[_wordOrdered[i + 1]]) {
-      _wordOrdered[i] = _wordOrdered[i + 1];
+  while (i + 1 < dest.size()) {
+    if (letterWeight[dest[i]] < letterWeight[dest[i + 1]]) {
+      char tmp = dest[i];
+      dest[i] = dest[i + 1];
+      dest[i + 1] = tmp;
       i = 0;
     }
     else
       i++;
   }
+  return dest;
 }
-
-std::string &
 
 void Word::displayFull() const {
   std::cout << std::setw(25) << "Mot"                    << " : " << _word << "\n"
@@ -53,9 +62,11 @@ void Word::displayFull() const {
 
 const std::string &Word::getWord() const { return _word; }
 
-const std::string &Word::getWordOrdered() const { return _uniqueLetters; }
+const std::string &Word::getWordOrdered() const { return _wordOrdered; }
 
-const std::string &Word::getWordUniqueLetters() const { return _uniqueLettersOrdered; }
+const std::string &Word::getWordUniqueLetters() const { return _uniqueLetters; }
 
-const std::string &Word::getWordUniqueLettersOrdered() const { return _wordOrdered; }
+const std::string &Word::getWordUniqueLettersOrdered() const { return _uniqueLettersOrdered; }
+
+const std::string &Word::getFirstLetters() const { return _firstLetters; }
 
