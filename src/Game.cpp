@@ -16,8 +16,20 @@ Game::~Game() {
 
 void Game::launch() {
   std::cout << "Veuillez patientez, creation du dictionnaire en cours ... " << std::flush;
-  _dict->load();
-  std::cout << "\r                                                          ";
+  _chrono.start();
+  try {
+    _dict->load();
+    std::cout << "\r                                                          \r";
+  }
+  catch (std::string e) {
+    std::cout << "\r                                                          \r";
+    std::cout << e << std::endl;
+  }
+  _chrono.stop();
+  std::cout << "Dictionnaire généré en : "
+            << (_chrono.getMilliseconds() / 1000) << ","
+            << (_chrono.getMilliseconds() % 1000) << " s"
+            << std::endl;
   _menu->show();
 }
 
@@ -44,15 +56,27 @@ void Game::enterLetters() {
 }
 
 void Game::getLongestWord() {
+  _chrono.start();
   if (getPossibilities()) {
     _dict->orderByLength(_possibilities);
+    _chrono.stop();
+    std::cout << "Resultat obtenu en : "
+              << (_chrono.getMicroseconds() / 1000) << ","
+              << (_chrono.getMicroseconds() % 1000) << " ms"
+              << std::endl;
     displayList();
   }
 }
 
 void Game::getScrabbleWord() {
+  _chrono.start();
   if (getPossibilities()) {
     _dict->orderByPoints(_possibilities);
+    _chrono.stop();
+    std::cout << "Resultat obtenu en : "
+              << (_chrono.getMicroseconds() / 1000) << ","
+              << (_chrono.getMicroseconds() % 1000) << " ms"
+              << std::endl;
     displayList(true);
   }
 }
@@ -77,8 +101,10 @@ void Game::findWord() {
     return findWord();
   }
   Word *w = _dict->findWord(new Word(toFind));
-  if (w)
+  if (w) {
     w->displayFull();
+    delete w;
+  }
   else
     std::cout << "Aucun mot n'a ete trouve" << std::endl;
 }
@@ -106,5 +132,6 @@ void Game::displayList(bool withPoints) {
     if ((col % 5) == 0)
       std::cout << "\n";
   }
-  std::cout << "\nTotal de " << i << " mots" << std::endl;
+  std::cout << "\nNombre de mots testés  : " << _dict->getLastTestedNbrWords() << std::endl;
+  std::cout << "Nombre de mots valides : " << i << std::endl;
 }

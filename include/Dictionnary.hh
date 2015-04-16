@@ -7,13 +7,12 @@
 #include <list>
 
 #include "Word.hh"
-#include "Menu.hpp"
 
 class Dictionnary {
 private:
-  Menu<void, Dictionnary>         *_menu;
   std::string                     _filename;
   std::vector<std::list<Word *> > _wordlistBySize;
+  int                             _lastTestedNbrWords;
 
   /**
    * Crée une liste avec tous les mots qui commencent par les lettres de recherche
@@ -61,6 +60,8 @@ public:
    * @param l Liste de mots a ordonner
    */
   void orderByPoints(std::list<Word *> &);
+
+  int getLastTestedNbrWords() const;
 };
 
 #endif

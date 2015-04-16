@@ -20,6 +20,7 @@ class Word {
 
   /**
    * Point d'une lettre calculé par rapport à son occurence dans la totalité des mots
+   * Généré par `node stats.js`
    */
   static std::map<char, int> _letterWeigth;
 

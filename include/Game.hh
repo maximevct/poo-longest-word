@@ -7,6 +7,7 @@
 #include "Menu.hpp"
 #include "Dictionnary.hh"
 #include "Word.hh"
+#include "Chrono.hpp"
 
 class Game {
 private:
@@ -14,6 +15,7 @@ private:
   Dictionnary      *_dict;
   std::string       _letters;
   std::list<Word *> _possibilities;
+  Chrono            _chrono;
 
   /**
    * Vérifie que des lettres de recherche sont bien entrées

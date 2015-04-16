@@ -2,14 +2,19 @@
 
 Dictionnary::Dictionnary(const std::string &filename) : _filename(filename) {
   _wordlistBySize.resize(10);
+  _lastTestedNbrWords = 0;
 }
 
-Dictionnary::~Dictionnary() {}
+Dictionnary::~Dictionnary() {
+  for (auto &v : _wordlistBySize)
+    for (auto &w : v)
+      delete w;
+}
 
 void Dictionnary::load() {
   std::ifstream file(_filename);
   if (!file)
-    throw "Unable to open file";
+    throw "Impossible d'ouvrir le fichier : " + _filename;
   while (file) {
     std::string line;
     if (getline(file, line))
@@ -29,11 +34,14 @@ Word *Dictionnary::findWord(Word *toFind) {
 std::list<Word *> Dictionnary::findPossibleWords(Word *toFind) {
   std::string _firstLettersToFind = toFind->getFirstLetters();
   std::list<Word *> possibilities;
+  _lastTestedNbrWords = 0;
   for (size_t size = toFind->getWord().size(); size > 1; size--) {
     std::list<Word *> res = findWordBeginWith(toFind, size);
+    _lastTestedNbrWords += res.size();
     if (res.size())
       possibilities.splice(possibilities.end(), compareWords(res, toFind));
   }
+  delete toFind;
   return possibilities;
 }
 
@@ -64,4 +72,8 @@ void Dictionnary::orderByPoints(std::list<Word *> &l) {
   l.sort([](Word *a, Word *b) -> bool {
     return a->getPoints() > b->getPoints();
   });
+}
+
+int Dictionnary::getLastTestedNbrWords() const {
+  return _lastTestedNbrWords;
 }
