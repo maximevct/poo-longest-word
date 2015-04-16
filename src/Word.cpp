@@ -18,14 +18,11 @@ std::map<char, int> Word::_letterWeigth = {
 };
 
 Word::Word(const std::string &word) : _word(word) {
-  transformToOrdered();
+  _points = 0;
+  sortByWeight();
 }
 
 Word::~Word() {}
-
-void Word::transformToOrdered() {
-  _wordOrdered = sortByWeight(_word);
-}
 
 bool Word::isComposedOf(const std::string &letters) const {
   size_t j = 0;
@@ -35,25 +32,30 @@ bool Word::isComposedOf(const std::string &letters) const {
   return j == letters.size();
 }
 
-std::string Word::sortByWeight(const std::string &src) {
-  std::string dest(src);
-  std::sort(dest.begin(), dest.end(), [&](char a, char b) -> bool {
+void Word::sortByWeight() {
+  bool validScrabble = _word.size() <= 7;
+  if (_word.size() == 7)
+    _points += 50;
+  for (const char &c : _word) {
+    _wordOrdered.push_back(c);
+    if (validScrabble)
+      _points += _scrabbleWeigth[c];
+  }
+  std::sort(_wordOrdered.begin(), _wordOrdered.end(), [&](char a, char b) -> bool {
     return Word::_letterWeigth[a] > Word::_letterWeigth[b];
   });
-  _firstLetters = dest.substr(0, 2);
-  return dest;
 }
 
 void Word::displayFull() const {
-  std::cout << std::setw(25) << "Mot"                    << " : " << _word          << "\n"
-            << std::setw(25) << "Lettres triees"         << " : " << _wordOrdered   << "\n"
-            << std::setw(25) << "Premieres lettres"      << " : " << _firstLetters  << "\n"
+  std::cout << std::setw(25) << "Mot"                    << " : " << _word                     << "\n"
+            << std::setw(25) << "Lettres triees"         << " : " << _wordOrdered              << "\n"
+            << std::setw(25) << "Premieres lettres"      << " : " << _wordOrdered.substr(0, 2) << "\n"
+            << std::setw(25) << "Points"                 << " : " << _points                   << "\n"
             << std::endl;
 }
 
 const std::string &Word::getWord() const { return _word; }
-
+const size_t      &Word::getPoints() const { return _points; }
 const std::string &Word::getWordOrdered() const { return _wordOrdered; }
-
-const std::string &Word::getFirstLetters() const { return _firstLetters; }
+const std::string Word::getFirstLetters() const { return _wordOrdered.substr(0, 2); }
 

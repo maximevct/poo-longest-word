@@ -12,10 +12,8 @@ void Dictionnary::load() {
     throw "Unable to open file";
   while (file) {
     std::string line;
-    if (getline(file, line)) {
-      Word *w = new Word(line);
-      _wordlistBySize[line.size() - 1].push_back(w);
-    }
+    if (getline(file, line))
+      _wordlistBySize[line.size() - 1].push_back(new Word(line));
   }
 }
 
@@ -59,5 +57,11 @@ std::list<Word *> Dictionnary::findWordBeginWith(Word *letters, size_t size) {
 void Dictionnary::orderByLength(std::list<Word *> &l) {
   l.sort([](Word *a, Word *b) -> bool {
     return a->getWord().size() > b->getWord().size();
+  });
+}
+
+void Dictionnary::orderByPoints(std::list<Word *> &l) {
+  l.sort([](Word *a, Word *b) -> bool {
+    return a->getPoints() > b->getPoints();
   });
 }
