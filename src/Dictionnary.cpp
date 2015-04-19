@@ -25,9 +25,12 @@ void Dictionnary::load() {
 Word *Dictionnary::findWord(Word *toFind) {
   std::string toFindStr = toFind->getWord();
   for (Word *w : _wordlistBySize[toFind->getWord().size() - 1]) {
-    if (w->getWord() == toFindStr)
+    if (w->getWord() == toFindStr) {
+      delete toFind;
       return w;
+    }
   }
+  delete toFind;
   return NULL;
 }
 
@@ -56,7 +59,7 @@ std::list<Word *> Dictionnary::compareWords(std::list<Word *> &words, Word *toFi
 std::list<Word *> Dictionnary::findWordBeginWith(Word *letters, size_t size) {
   std::list<Word *> possibilities;
   for (Word *w : _wordlistBySize[size - 1]) {
-    if (letters->isComposedOf(w->getFirstLetters()))
+    if (letters->getPoints() >= w->getPoints() && letters->isComposedOf(w->getFirstLetters()))
       possibilities.push_back(w);
   }
   return possibilities;
@@ -70,7 +73,7 @@ void Dictionnary::orderByLength(std::list<Word *> &l) {
 
 void Dictionnary::orderByPoints(std::list<Word *> &l) {
   l.sort([](Word *a, Word *b) -> bool {
-    return a->getPoints() > b->getPoints();
+    return a->getScrabblePoints() > b->getScrabblePoints();
   });
 }
 

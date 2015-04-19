@@ -30,6 +30,8 @@ private:
    * @param withPoints true si on veut afficher les points
    */
   void displayList(bool = false);
+
+  std::string getLetters();
 public:
   /**
    * Creation de l'objet dictionnaire

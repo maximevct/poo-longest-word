@@ -33,26 +33,33 @@ void Game::launch() {
   _menu->show();
 }
 
-void Game::enterLetters() {
+std::string Game::getLetters() {
   std::string letters = _menu->getString("Entrez entre 1 et 10 lettres");
   if (letters == "0")
-    return ;
+    return letters;
   if (letters.size() > 10) {
     std::cout << "Erreur : Le nombre de lettres doit etre inférieur à 10" << std::endl;
-    return enterLetters();
+    return getLetters();
   }
   for (char &c : letters) {
     if (c >= 'A' && c <= 'Z')
       c += 32;
     if (c < 'a' || c > 'z') {
       std::cout << "Erreur : Utilisez uniquement des caractères alphabétiques" << std::endl;
-      return enterLetters();
+      return getLetters();
     }
   }
-  _letters = letters;
+  return letters;
+}
+
+void Game::enterLetters() {
+  std::string l = getLetters();
+  if (l == "0")
+    return ;
+  _letters = l;
   _possibilities.clear();
-  _menu->setTitle("Menu principal (Lettres : " + letters + ")");
-  std::cout << "Vous avez choisi les lettres : " << letters << std::endl;
+  _menu->setTitle("Menu principal (Lettres : " + _letters + ")");
+  std::cout << "Vous avez choisi les lettres : " << _letters << std::endl;
 }
 
 void Game::getLongestWord() {
@@ -92,19 +99,12 @@ bool Game::getPossibilities() {
 }
 
 void Game::findWord() {
-  std::string toFind = _menu->getString("Entrez le mot a chercher");
-  if (toFind == "0")
-    return;
-  size_t size = toFind.size() - 1;
-  if (size > 10 || size < 2) {
-    std::cout << "Le nombre de lettres doit etre de 2 a 10, reessayez" << std::endl;
-    return findWord();
-  }
-  Word *w = _dict->findWord(new Word(toFind));
-  if (w) {
+  std::string l = getLetters();
+  if (l == "0")
+    return ;
+  Word *w = _dict->findWord(new Word(l));
+  if (w)
     w->displayFull();
-    delete w;
-  }
   else
     std::cout << "Aucun mot n'a ete trouve" << std::endl;
 }
@@ -114,7 +114,7 @@ void Game::displayList(bool withPoints) {
   int col = 0;
   size_t old_sep = 999;
   for (Word *w : _possibilities) {
-    size_t new_sep = withPoints ? w->getPoints() : w->getWord().size();
+    size_t new_sep = withPoints ? w->getScrabblePoints() : w->getWord().size();
     if (new_sep == 0)
       break;
     if (new_sep != old_sep) {
@@ -126,7 +126,9 @@ void Game::displayList(bool withPoints) {
       std::cout << (withPoints ? "Points" : " Taille") << " : " << new_sep << std::endl;
       col = 0;
     }
-    std::cout << std::setw(10) << w->getWord() << " | ";
+    std::cout << std::setw(10) << w->getWord()
+              << (withPoints && w->getWord().size() > 7 ? "#" : " ")
+              << "| ";
     i++;
     col++;
     if ((col % 5) == 0)

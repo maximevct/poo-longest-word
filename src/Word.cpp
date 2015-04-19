@@ -19,31 +19,32 @@ std::map<char, int> Word::_letterWeigth = {
 
 Word::Word(const std::string &word) : _word(word) {
   _points = 0;
+  _scrabblePoints = (_word.size() >= 7 ? 50 : 0);
   sortByWeight();
+  _firstLetters = _wordOrdered.substr(0, 2);
 }
 
 Word::~Word() {}
 
 bool Word::isComposedOf(const std::string &letters) const {
   size_t j = 0;
-  for (size_t i = 0; i < _wordOrdered.size() && j < letters.size(); i++)
+  size_t sizeW = _wordOrdered.size();
+  size_t sizeL = letters.size();
+  for (size_t i = 0; i < sizeW && j < sizeL; i++)
     if (letters[j] == _wordOrdered[i])
       j++;
-  return j == letters.size();
+  return j == sizeL;
 }
 
 void Word::sortByWeight() {
-  bool validScrabble = _word.size() <= 7;
-  if (_word.size() == 7)
-    _points += 50;
   for (const char &c : _word) {
-    _wordOrdered.push_back(c);
-    if (validScrabble)
-      _points += _scrabbleWeigth[c];
+    int lPoint = Word::_letterWeigth[c];
+    _points += lPoint;
+    _scrabblePoints += _scrabbleWeigth[c];
+    _wordOrdered.insert(std::find_if(_wordOrdered.begin(), _wordOrdered.end(), [&](char &c) {
+      return Word::_letterWeigth[c] < lPoint;
+    }), c);
   }
-  std::sort(_wordOrdered.begin(), _wordOrdered.end(), [&](char a, char b) -> bool {
-    return Word::_letterWeigth[a] > Word::_letterWeigth[b];
-  });
 }
 
 void Word::displayFull() const {
@@ -51,11 +52,13 @@ void Word::displayFull() const {
             << std::setw(25) << "Lettres triees"         << " : " << _wordOrdered              << "\n"
             << std::setw(25) << "Premieres lettres"      << " : " << _wordOrdered.substr(0, 2) << "\n"
             << std::setw(25) << "Points"                 << " : " << _points                   << "\n"
+            << std::setw(25) << "Points Scrabble"        << " : " << _scrabblePoints           << "\n"
             << std::endl;
 }
 
-const std::string &Word::getWord() const { return _word; }
-const size_t      &Word::getPoints() const { return _points; }
-const std::string &Word::getWordOrdered() const { return _wordOrdered; }
-const std::string Word::getFirstLetters() const { return _wordOrdered.substr(0, 2); }
+const std::string &Word::getWord()            const { return _word;           }
+const size_t      &Word::getPoints()          const { return _points;         }
+const size_t      &Word::getScrabblePoints()  const { return _scrabblePoints; }
+const std::string &Word::getWordOrdered()     const { return _wordOrdered;    }
+const std::string &Word::getFirstLetters()    const { return _firstLetters;   }
 
