@@ -1,50 +1,67 @@
 # poo-longest-word
 
-## Cours
-  -
+## Environnement de développement
 
-## Idées
-  - Mettre tous les mots dans le meme ordre pour comparer les lettres directement
-  - Ne pas avoir peur de mettre beaucoup de listes différentes
-  - Filtre de bloom
-  - Opérateurs binaire : & (et), | (ou), tilde (negation), ^ xor (ou exclusif)
-  - std::vector<bool> stocke des tableaux de bits au lieu de tableau de booleens
-  - a << 3
-    - Décalage vers <-
-    - a      = 10110111
-    - a << 1 = 01101110
-    - a << 3 = 10111000
-    - Décale les bits
-  - a >> 1, meme chose mais de l'autre coté (Décalage vers ->)
-    - Si a est signé, on garde le bit de signe
-    - Sinon, c'est un zéro qui rentre
+  - Système : Ubuntu 14.04 LTS (64 bits)
+  - Editeur : Sublime Text 2
+  - Compilateur : g++
 
-  - Pour flipper le bit à la 4ème position : a ^= (1 << 4)
-    - 1 = 00000001
-    - 1 << 4 = 00010000
-    - Le ou exlcusif modifie le bit désiré
+## Fichiers
+  - **src**
+    - Dictionnary.cpp
+    - Game.cpp
+    - Word.cpp
+    - main.cpp
+  - **include**
+    - Chrono.hpp
+    - Dictionnary.hh
+    - Game.hh
+    - Menu.hpp
+    - Word.hh
+  - **dataset**
+    - dictionnary.txt
+  - Makefile
+  - Readme.md
+  - stats.js
 
-  - Pour mettre à 1 le bit à la 4ème position : a = (a & ~(1 << 4)) | (1 << 3)
-    - 1 = 00000001
-    - 1 << 4 = 00010000
-    - Le ou exlcusif modifie le bit désiré
+### Comment l'utiliser :
+```bash
+  $ make
+  $ ./longest_word dataset/dictionnary.txt
+```
 
+### Fonctionnalités :
 
-### filtres
-  - Premiere lettre -> vecteur de 27 booleens
-  - Taille maximum du mot -> vecteur de 10 booleens
+#### Option 0 : Quitter
+Quitte le programme
 
-  - Réduire les mots (pas de repetition de lettres) et les classer dans l'ordre alpahbetique
-  - Transformer les mots en binaire : APPLE = AELPP = 1, 5, 12, 16, 16
+#### Option 1 : Entrer les lettres de recherches
+Permet d'entrer de 2 à 10 lettres minuscules
 
+#### Option 2 : Rechercher le mot le plus long avec les lettres entrées
+Recherche et affiche tous les mots qu'il est possible de construire avec les lettres entrées
+Les mots sont organisées par taille puis ordre alphabétique. La taille des mots est affichée comme séparateur
+Au début de la liste est affiché le temps en millisecondes nécessaire pour la construction de la liste de mots
+A la fin de la liste est affiché le nombre de mots qui ont étés entièrement testés ainsi que le nombre de mots dans la liste
 
+#### Option 3 : Rechercher le mot le plus fort au scrabble avec les lettres entrées
+Recherche et affiche tous les mots qu'il est possible de construire avec les lettres entrées
+Les mots sont organisées par leur nombre de points au Scrabble puis par ordre alphabétique. Les points des mots sont affichés comme séparateurs. 
+Au début de la liste est affiché le temps en millisecondes nécessaire pour la construction de la liste de mots
+A la fin de la liste est affiché le nombre de mots qui ont étés entièrement testés ainsi que le nombre de mots dans la liste
 
-## Steps :
-  - Load dictionnary DONE
-  - Create main menu
-  - Get letters
-  - Display result
-  - First brute force algorithm
-  - Implements unit tests
-  - Create bloom filters
-  - Implement algorithm
+#### Option 4 : Rechercher un mot exact
+Recherche et affiche le mot entré. L'affichage permet de voir :
+  - Les lettres du mot ordonnées par leur rareté
+  - Les deux lettres les plus rares du mot
+  - Le nombre de points rapportés par ce mot au scrabble
+
+#### Stats.js
+```bash
+ $ node stats.js
+```
+
+Ce script affiche une liste de lettres ordonnée par le nombre d'occurences des lettres dans le dictionnaire. Il permet de voir quelles lettres sont les plus rares des plus communes
+
+### Auteur 
+Maxime VINCENT
