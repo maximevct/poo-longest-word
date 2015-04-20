@@ -38,5 +38,16 @@ fs.readFile('./dataset/dictionary.txt', 'utf8', function (err,data) {
   for (var i = 0; i < order.length; i++) {
     order[i].order = i + 1;
   };
+  i = 0;
+  while (i + 1 < order.length) {
+    if (order[i].letter > order[i + 1].letter) {
+      var tmp = order[i];
+      order[i] = order[i + 1];
+      order[i + 1] = tmp;
+      i = 0;
+    }
+    else
+      i++;
+  }
   console.log(order);
 });

@@ -16,17 +16,6 @@ class Word {
   size_t       _scrabblePoints;
 
   /**
-   * Point par lettre du scrabble
-   */
-  static std::map<char, int> _scrabbleWeigth;
-
-  /**
-   * Point d'une lettre calculé par rapport à son occurence dans la totalité des mots
-   * Généré par `node stats.js`
-   */
-  static std::map<char, int> _letterWeigth;
-
-  /**
    * Crée un mot ordonné par le nombre d'occurences de lettres (_letterWeigth)
    * Si le mot est composé de 7 lettres ou plus, il gagne 50 points au scrabble
    */

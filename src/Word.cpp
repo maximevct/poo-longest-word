@@ -1,22 +1,5 @@
 #include "Word.hh"
 
-std::map<char, int> Word::_scrabbleWeigth = {
-  {'a', 1 }, {'e', 1 }, {'i', 1 }, {'l', 1 }, {'n', 1 }, {'o', 1 }, {'r', 1 }, {'s', 1 }, {'t', 1 }, {'u', 1 },
-  {'d', 2 }, {'g', 2 }, {'m', 2 },
-  {'b', 3 }, {'c', 3 }, {'p', 3 },
-  {'f', 4 }, {'h', 4 }, {'v', 4 },
-  {'j', 8 }, {'q', 8 },
-  {'k', 10}, {'w', 10}, {'x', 10}, {'y', 10}, {'z', 10}
-};
-
-std::map<char, int> Word::_letterWeigth = {
-  {'e', 1  },  {'a', 2  },  {'s', 3  },  {'i', 4  },  {'r', 5  },  {'t', 6  },
-  {'n', 7  },  {'o', 8  },  {'u', 9  },  {'l', 10 },  {'c', 11 },  {'m', 12 },
-  {'p', 13 },  {'d', 14 },  {'g', 15 },  {'b', 16 },  {'f', 17 },  {'h', 18 },
-  {'z', 19 },  {'v', 20 },  {'q', 21 },  {'y', 22 },  {'x', 23 },  {'j', 24 },
-  {'k', 25 },  {'w', 26 }
-};
-
 Word::Word(const std::string &word) : _word(word) {
   _points = 0;
   _scrabblePoints = (_word.size() >= 7 ? 50 : 0);
@@ -37,12 +20,15 @@ bool Word::isComposedOf(const std::string &letters) const {
 }
 
 void Word::sortByWeight() {
+  static const int scrabbleWeigth[] = { 1, 3, 3, 2, 1, 4, 2, 4, 1, 8,10, 1, 2, 1, 1, 3, 8, 1, 1, 1, 1, 4,10,10,10,10};
+  static const int letterWeigth[]   = { 2,16,11,14, 1,17,15,18, 4,24,25,10,12, 7, 8,13,21, 5, 3, 6, 9,20,26,23,22,19};
   for (const char &c : _word) {
-    int lPoint = Word::_letterWeigth[c];
+    int l = c - 'a';
+    int lPoint = letterWeigth[l];
     _points += lPoint;
-    _scrabblePoints += _scrabbleWeigth[c];
+    _scrabblePoints += scrabbleWeigth[l];
     _wordOrdered.insert(std::find_if(_wordOrdered.begin(), _wordOrdered.end(), [&](char &c) {
-      return Word::_letterWeigth[c] < lPoint;
+      return letterWeigth[c - 'a'] < lPoint;
     }), c);
   }
 }
