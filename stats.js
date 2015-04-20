@@ -49,5 +49,8 @@ fs.readFile('./dataset/dictionary.txt', 'utf8', function (err,data) {
     else
       i++;
   }
+  for (var i = 0; i < order.length; i++) {
+    order[i].orderL = i + 1;
+  };
   console.log(order);
 });
