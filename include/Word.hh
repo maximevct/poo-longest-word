@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
-#include <map>
 
 class Word {
   private:

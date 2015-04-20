@@ -116,6 +116,7 @@ public:
       }
       catch (...) {
         std::cout << "Choix invalide" << std::endl;
+        std::cin.clear();
         entry = -1;
       }
     }
