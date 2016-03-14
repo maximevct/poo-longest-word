@@ -32,6 +32,11 @@
   $ ./longest_word dataset/dictionnary.txt
 ```
 
+#### Pour avoir rapidement le mot le plus long avec les lettres
+```bash
+  $ ./exec.sh <letters>
+```
+
 ### Fonctionnalités :
 
 #### Option 0 : Quitter
